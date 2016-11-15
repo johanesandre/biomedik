@@ -1,7 +1,10 @@
-import pywt,numpy as np
+import pywt,numpy as np,os
 np.set_printoptions(threshold=np.nan)
-
-openfileS=open("C:\\Users\\freddy\\Downloads\\Compressed\\S\\Sresult.txt","r")
+active_file_dir=os.path.dirname(__file__)
+get_all_data=[]
+get_all_wavelet=[] # -> untuk menyimpan semua hasil waveletnya dari 5 file besar tersebut.
+#open file F
+openfileS=open(os.path.join(active_file_dir,"Fresult.txt"),"r")
 tempdataS=openfileS.read()
 temp1dataS=tempdataS.split("\n")
 #become list in data.
@@ -9,17 +12,65 @@ temp2dataS= map(int, temp1dataS)
 #become numpy array.
 dataS=np.asarray(temp2dataS)
 #split data every 4097 data
-get_S_wavelet=[]
 composite_list_S=np.split(dataS,100)
-for x in range(len(composite_list_S)):
+get_all_data.append(composite_list_S)
+
+#open N data
+openfileS=open(os.path.join(active_file_dir,"Nresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+
+#get O data
+openfileS=open(os.path.join(active_file_dir,"Oresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+
+#open S file
+openfileS=open(os.path.join(active_file_dir,"Sresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+
+#open Z file
+openfileS=open(os.path.join(active_file_dir,"Zresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+# ^ end of input data
+
+
+
+for x in range(len(get_all_data)):
+    for y in range(len(get_all_data[x])) :
+        # jandre kodemu startnya dari sini saja
+        #if len(get_all_data[x][y])== int(4097):
+         #   counter+=1
+         
     
-    '''
-    ca,cd1,cd2,cd,cd3,cd4 = pywt.wavdec(composite_list_S[x],"db1",level=4)
-    temp=[]
-    temp.append(ca)
-    temp.append(cd)
-    get_S_wavelet.append(temp)
-    #print len(temp)
-    #sisanya kita tinggal ngepush semua datanya yang kita dapatkan dari wavelet yang ada.
-print len(get_S_wavelet[1])
-'''
+#print counter    
