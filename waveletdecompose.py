@@ -14,9 +14,8 @@ def energi(nilai):
     #print('The energy is {}.'.format(E))
     return E
 
-def standardeviasi(nilai):
-	np.std(nilai)
-	return nilai
+def standardeviasi(nilai):	
+	return np.std(nilai)
 
 def maximum(nilai):
 	nilaimaximum= np.amax(nilai)
