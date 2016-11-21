@@ -1,5 +1,5 @@
 import pywt,numpy as np,os
-
+from pyeeg  import ap_entropy 
 import waveletdecompose as dc
 #import coba1file as coba
 #import cobafileturun as cobalagi
@@ -139,7 +139,8 @@ for x in range(len(get_all_wavelet)):
         temp_extrasi1.append(np.std(get_all_wavelet[x][y])) # stdmu salah cak ji. aku langsung ambil ae iki.
         temp_extrasi1.append(dc.maximum(get_all_wavelet[x][y]))
         temp_extrasi1.append(dc.mininum(get_all_wavelet[x][y]))
-        #temp_extrasi1.append() diisi dengan aproximate entropy
+        temp_extrasi1.append(ap_entropy(get_all_wavelet[x][y],len(get_all_wavelet[x][y])/5,temp_extrasi1[1]*float(0.2)))# diisi dengan aproximate entropy
+        #param 1 itu datanya param ke dua itu panjangnya data yang ingin d potong , param ke tiga itu similarity. param ke dua dan ketiga diisi dengan mencoba coba
         temp_wavelet1.append(temp_extrasi1)
         temp_extrasi1=[]
     hasil_extrasi_fitur.append(temp_wavelet1)
@@ -147,7 +148,7 @@ for x in range(len(get_all_wavelet)):
     
 # hasil seluruh extrasi fitur ada di hasil_extrasi_fitur dengan data berukuran 3D
 
-'''
+
 print len(hasil_extrasi_fitur)
 if len(hasil_extrasi_fitur) >int(0):
     print len(hasil_extrasi_fitur[0])
@@ -155,7 +156,8 @@ if len(hasil_extrasi_fitur) >int(0):
     print hasil_extrasi_fitur[0][0][1]
     print hasil_extrasi_fitur[0][0][2]
     print hasil_extrasi_fitur[0][0][3]
-   # print hasil_extrasi_fitur[0][0][4]
+    print hasil_extrasi_fitur[0][0][4]
+
 '''
 # ini buat nyimpan kelas SVM nya aku asumsikan bahwa kelasnya banyaknya 5
 svm_class_all=[1,2,3,4,5]
@@ -170,3 +172,4 @@ for x in range(len(svm_class_all)):
 #print (svm_every_file[0])
 
 #saiki kate lapo?????
+'''
