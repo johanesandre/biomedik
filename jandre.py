@@ -158,6 +158,23 @@ if len(hasil_extrasi_fitur) >int(0):
     print hasil_extrasi_fitur[0][0][3]
     print hasil_extrasi_fitur[0][0][4]
 
+training_array=[]
+testing_array=[]
+temp=[]
+temp1=[]
+for x in range(len(get_all_wavelet)):
+	for y in range(get_all_wavelet[x]):
+		if y < len(get_all_wavelet[x])-10:
+			temp.append(hasil_extrasi_fitur[x][y])
+		else :
+			temp1.append(hasil_extrasi_fitur[x][y])
+	training_array.append(temp)
+	testing_array.append(temp1)
+
+for x in range(len(training_array)):
+	print len(training_array)
+	print len(testing_array)
+	
 '''
 # ini buat nyimpan kelas SVM nya aku asumsikan bahwa kelasnya banyaknya 5
 svm_class_all=[1,2,3,4,5]
