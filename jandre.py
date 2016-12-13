@@ -1,25 +1,190 @@
-import pywt,numpy as np
+import pywt,numpy as np,os
+from pyeeg  import ap_entropy 
+import waveletdecompose as dc
+#import coba1file as coba
+#import cobafileturun as cobalagi
+#import pyegg as buatentropy
+#import approximateEn as apEn
 np.set_printoptions(threshold=np.nan)
 
-openfileS=open("C:\\Users\\freddy\\Downloads\\Compressed\\S\\Sresult.txt","r")
+active_file_dir=os.path.dirname(__file__)
+get_all_data=[]
+get_all_wavelet=[] # -> untuk menyimpan semua hasil waveletnya dari 5 file besar tersebut.
+
+np.set_printoptions(threshold=np.nan)
+active_file_dir=os.path.dirname(__file__)
+get_all_data=[]
+get_all_wavelet=[] # -> untuk menyimpan semua hasil waveletnya dari 5 file besar tersebut.
+
+#open file F
+openfileS=open(os.path.join(active_file_dir,"Fresult.txt"),"r")
 tempdataS=openfileS.read()
 temp1dataS=tempdataS.split("\n")
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+
+
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+
+
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+
+#open N data
+openfileS=open(os.path.join(active_file_dir,"Nresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+
+#get O data
+openfileS=open(os.path.join(active_file_dir,"Oresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+
+
 #become list in data.
 temp2dataS= map(int, temp1dataS)
 #become numpy array.
 dataS=np.asarray(temp2dataS)
 #split data every 4097 data
-get_S_wavelet=[]
 composite_list_S=np.split(dataS,100)
-for x in range(len(composite_list_S)):
+get_all_data.append(composite_list_S)
+
+#open S file
+openfileS=open(os.path.join(active_file_dir,"Sresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+
+#open Z file
+openfileS=open(os.path.join(active_file_dir,"Zresult.txt"),"r")
+tempdataS=openfileS.read()
+temp1dataS=tempdataS.split("\n")
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+
+
+#become list in data.
+temp2dataS= map(int, temp1dataS)
+
+#become numpy array.
+dataS=np.asarray(temp2dataS)
+#split data every 4097 data
+composite_list_S=np.split(dataS,100)
+get_all_data.append(composite_list_S)
+# ^ end of input data
+
+temp_wavelet1=[]
+for x in range(len(get_all_data)):
+    for y in range(len(get_all_data[x])) :
+        # jandre kodemu startnya dari sini saja
+        if len(get_all_data[x][y])== int(4097):
+        	#get_all_wavelet.append(dc.waveletTransform(get_all_data[x][y]))
+        	temp_wavelet1.append(dc.waveletTransform(get_all_data[x][y]))
+    get_all_wavelet.append(temp_wavelet1)
+    temp_wavelet1=[]         
+
+#print (get_all_wavelet[0][0])
+temp_extrasi1=[]
+temp_wavelet1=[]# for getting temporary array for fiture extraction
+hasil_extrasi_fitur=[] #getting all result in feature extraction
+for x in range(len(get_all_wavelet)):
+    for y in range(len(get_all_wavelet[x])):
+        temp_extrasi1.append(dc.energi(get_all_wavelet[x][y]))
+        temp_extrasi1.append(np.std(get_all_wavelet[x][y])) # stdmu salah cak ji. aku langsung ambil ae iki.
+        temp_extrasi1.append(dc.maximum(get_all_wavelet[x][y]))
+        temp_extrasi1.append(dc.mininum(get_all_wavelet[x][y]))
+        temp_extrasi1.append(ap_entropy(get_all_wavelet[x][y],len(get_all_wavelet[x][y])/5,temp_extrasi1[1]*float(0.2)))# diisi dengan aproximate entropy
+        #param 1 itu datanya param ke dua itu panjangnya data yang ingin d potong , param ke tiga itu similarity. param ke dua dan ketiga diisi dengan mencoba coba
+        temp_wavelet1.append(temp_extrasi1)
+        temp_extrasi1=[]
+    hasil_extrasi_fitur.append(temp_wavelet1)
+    temp_wavelet1=[]
     
-    '''
-    ca,cd1,cd2,cd,cd3,cd4 = pywt.wavdec(composite_list_S[x],"db1",level=4)
-    temp=[]
-    temp.append(ca)
-    temp.append(cd)
-    get_S_wavelet.append(temp)
-    #print len(temp)
-    #sisanya kita tinggal ngepush semua datanya yang kita dapatkan dari wavelet yang ada.
-print len(get_S_wavelet[1])
+# hasil seluruh extrasi fitur ada di hasil_extrasi_fitur dengan data berukuran 3D
+
+'''
+print len(hasil_extrasi_fitur)
+if len(hasil_extrasi_fitur) >int(0):
+    print len(hasil_extrasi_fitur[0])
+    print hasil_extrasi_fitur[0][0][0]
+    print hasil_extrasi_fitur[0][0][1]
+    print hasil_extrasi_fitur[0][0][2]
+    print hasil_extrasi_fitur[0][0][3]
+    print hasil_extrasi_fitur[0][0][4]
+'''
+training_array=[]
+testing_array=[]
+temp=[]
+temp1=[]
+for x in range(len(get_all_wavelet)):
+	for y in range(len(get_all_wavelet[x])):
+		if y < len(get_all_wavelet[x])-10:
+		    temp.append(hasil_extrasi_fitur[x][y])
+		else :
+		    temp1.append(hasil_extrasi_fitur[x][y])
+	training_array.append(temp)
+	testing_array.append(temp1)
+	temp=[]
+	temp1=[]
+# ini pembagiannya untuk setiap array traning ada 90 data dan setiap array testing ada 10 data. panjang dari array training dan testing adalah 5
+'''
+# ini buat nyimpan kelas SVM nya aku asumsikan bahwa kelasnya banyaknya 5
+svm_class_all=[1,2,3,4,5]
+svm_every_file=[]
+temp_for_class_svm=[]
+for x in range(len(svm_class_all)):
+    for y in range(len(get_all_wavelet[x])):
+        temp_for_class_svm.append(svm_class_all[x])
+    svm_every_file.append(temp_for_class_svm)
+    temp_for_class_svm=[]
+
+#print (svm_every_file[0])
+
+#saiki kate lapo?????
 '''
