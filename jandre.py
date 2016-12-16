@@ -139,7 +139,7 @@ for x in range(len(get_all_wavelet)):
         temp_extrasi1.append(np.std(get_all_wavelet[x][y])) # stdmu salah cak ji. aku langsung ambil ae iki.
         temp_extrasi1.append(dc.maximum(get_all_wavelet[x][y]))
         temp_extrasi1.append(dc.mininum(get_all_wavelet[x][y]))
-        temp_extrasi1.append(ap_entropy(get_all_wavelet[x][y],len(get_all_wavelet[x][y])/5,temp_extrasi1[1]*float(0.2)))# diisi dengan aproximate entropy
+        temp_extrasi1.append(ap_entropy(get_all_wavelet[x][y],len(get_all_wavelet[x][y])/5,temp_extrasi1[1]*float(0.3)))# diisi dengan aproximate entropy
         #param 1 itu datanya param ke dua itu panjangnya data yang ingin d potong , param ke tiga itu similarity. param ke dua dan ketiga diisi dengan mencoba coba
         temp_wavelet1.append(temp_extrasi1)
         temp_extrasi1=[]
@@ -165,26 +165,60 @@ temp1=[]
 for x in range(len(get_all_wavelet)):
 	for y in range(len(get_all_wavelet[x])):
 		if y < len(get_all_wavelet[x])-10:
-		    temp.append(hasil_extrasi_fitur[x][y])
+		    training_array.append(hasil_extrasi_fitur[x][y])
 		else :
-		    temp1.append(hasil_extrasi_fitur[x][y])
-	training_array.append(temp)
-	testing_array.append(temp1)
-	temp=[]
-	temp1=[]
+		    testing_array.append(hasil_extrasi_fitur[x][y])
+	#training_array.append(temp)
+	#testing_array.append(temp1)
+	#temp=[]
+	#temp1=[]
+
+#print training_array
+
 # ini pembagiannya untuk setiap array traning ada 90 data dan setiap array testing ada 10 data. panjang dari array training dan testing adalah 5
-'''
+
 # ini buat nyimpan kelas SVM nya aku asumsikan bahwa kelasnya banyaknya 5
-svm_class_all=[1,2,3,4,5]
+
+#Nama --> Set
+#1 --> F-->D
+#2---> N-->C
+#3---> O-->B
+#4-->  S-->F
+#5-->  Z-->A
+
+#Normal--> O & Z (B Dan A )
+#Epilepsi tidak aktif --> F & N(C Dan D)
+#Epilepsi Aktif -->  S  
+svm_class_all=[2,2,1,2,1]
 svm_every_file=[]
 temp_for_class_svm=[]
-for x in range(len(svm_class_all)):
-    for y in range(len(get_all_wavelet[x])):
-        temp_for_class_svm.append(svm_class_all[x])
-    svm_every_file.append(temp_for_class_svm)
-    temp_for_class_svm=[]
+for x in range(len(svm_class_all)): #5
+    for y in range(len(get_all_wavelet[x])-10): #100
+        svm_every_file.append(svm_class_all[x])
+    #svm_every_file.append(temp_for_class_svm)
+    #temp_for_class_svm=[]
+#print svm_every_file[0][0]
+from sklearn.svm import SVC
+
+X1= np.array(training_array)
+print len(X1)
+y1=np.array(svm_every_file)
+print len(y1)
+clf = SVC()    
+clf.fit(X1,y1)
+
+hasil=[]
+for x in range(0,4):
+    hasil.append(int(0))
+for x in range(len(testing_array)):
+    #print (clf.predict(testing_array[x]))
+    hasil[clf.predict(testing_array[x])]=hasil[clf.predict(testing_array[x])]+1
+print hasil
+
+
+
+
 
 #print (svm_every_file[0])
 
 #saiki kate lapo?????
-'''
